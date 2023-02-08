@@ -28,8 +28,40 @@ Et, en ne passant pas en valeur absolue l'écart entre les observations et la mo
 
 Prenons l'exemple de la variable "Ortg" qui correspond à l'offensive rating, une statistique avancée qui calcule l'impact d'un joueur sur l'attaque de son équipe (plus la statistique est élevée, plus le joueur impacte positivement l'attaque de son équipe). Le boxplot nous montre que la variable possède des individus potentiellement atypiques supérieures et inférieures à la moyenne.
 ![image](https://user-images.githubusercontent.com/116641100/217602324-8d4ab105-fdb1-46d4-994e-9a8be84d1bee.png)
+Lorsque nous utilisons la fontion mis à disposition par François, nous obtenons 19 valeurs atypiques avec un seuil de 44,8. Seulement, nous ne savons pas quelle partie des valeurs atypiques correspondent aux valeurs supérieures ou aux valeurs inférieures à la moyenne. 
+Avec les deux fonctions que j'ai modifié à partir de la fonction initiale, nous obtenons 2 valeurs atypiques supérieures à la moyenne avec un seuil à 159,6 et 17 valeurs atypiques inférieures à la moyenne avec un seuil à 44,8.
+Ainsi, nous pouvons supprimer tous les individus ayant un Ortg supérieur à 159,6 et inférieur à 44,8.
 
 Ainsi, grâce à ces trois fonctions, nous avons pu supprimer toutes les observations possédant des valeurs atypiques et notre base de données est maintenant constitués de 10 245 joueurs pour 59 variables.
 
 ### Etude des corrélations
 Enfin, nous avons étudier les corrélations entre nos variables pour voir si certaines variables donnait des informations redondantes dans notre analyse.
+![image](https://user-images.githubusercontent.com/116641100/217606284-23f36948-eceb-4f31-88fc-9bc06110cd59.png)
+
+Afin de réaliser un premier tri dans nos variables, nous allons utiliser une méthode de régression pénalisée Elastic-Net. Cette méthode nous permet de supprimer les variables 'eFG', 'twoPM', 'bpm' de notre base de données.
+
+Cependant, après réalisation de ce tri, il reste toujours un nombre important de variables explcatives fortement corrélées entre elles.
+![téléchargement](https://user-images.githubusercontent.com/116641100/217613219-3670e23d-651a-492c-ba8d-b4d5a2ec2a93.png)
+
+Ainsi, nous remarquons que les couples de variables FTM & FTA, TPM & TPA, rimmade & rimmade+rimmiss, midmade & midmade+midmiss, dunksmade & dunksmiss+dunksmade sont fortement corrélées entre elles puisqu'elles comptabilise le nombre d'essai d'un type de shoot et le nombre de succès de ce même type de shoot. 
+Sachant que nous avons les pourcentages de réussite de chacun de ces types de shoot, nous allons supprimer l'ensemble de ces variables puisque leur information est déjà comprise dans la variable en pourcentage.
+
+Le pourcentage de minutes joués par un joueur (Min_per) est fortement corrélés aux nombres de stops effectués par ce dernier ainsi qu'à son nombre de matchs joués. Etant donné que les variables stops et matchs joués (MP) ne sont pas corrélés entre elles, nous allons simplement supprimer la variable Min_per de notre base de données.
+
+Les couples de variables obpm & ogbpm ainsi que dbpm & dgbpm mesure sensiblement la même information et sont donc fortement corrélés. Le calcul des variables obpm et dbpm étant nettement plus simple et captant la même information, nous allons supprimer les variables ogbpm et dgbpm de notre base de données.
+
+Les variables dreb et treb sont fortement corrélés. Etant donné que nous avons la différence entre les rebonds offensifs et défensifs, le nombre total de rebond nous donne une information redondante. Nous allons donc supprimer la variable treb de notre base de données.
+
+Les variables AST_per et ast sont aussi fortement corrélés. Ces deux variables nous donne une information similaire, le nombre de passes décisives effectués par un joueur. Nous allons donc garder les valeurs brutes de passes décisives au lieu du ratio de passes décisives d'un joueur par rapport au nombre de passes décisives totales de l'équipe. La variable AST_per sera donc supprimée de notre base de données.
+
+La variable adjoe est fortement corrélés à la variable ogbpm. Cependant, comme nous supprimons déjà la variable ogbpm de notre base de données nous pouvons garder la variable adjoe.
+
+![téléchargement (1)](https://user-images.githubusercontent.com/116641100/217615218-55a2b66f-0305-4cd7-a525-3e8897ef1188.png)
+Après avoir supprimé ces variables de notre base de données, nous observons qu'il n'y a plus de problème de multicolinéarité dans notre base de données. Nous allons donc passer à la modélisation avec une base de données composée de 10 245 joueurs pour 41 variables dont 3 ne sont pas utilisées car elle donne le nom, l'équipe et la conférence du joueur et 1 correspond à la variable à expliquer. Ainsi, notre base comprend 37 variables explicatives.
+
+## Modélisation
+
+
+
+
+
