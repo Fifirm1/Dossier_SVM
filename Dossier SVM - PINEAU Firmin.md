@@ -26,6 +26,9 @@ Ainsi, en ne passant pas en valeur absolue l'écart entre les observations et la
 
 Et, en ne passant pas en valeur absolue l'écart entre les observations et la moyenne puis en triant les valeur par ordre croissant, nous aurons les valeurs potentiellement atypiques inférieures à la moyenne qui seront vérifier en première. Cependant, cette différence étant négative, nous allons ensuite les passer en valeur absolue pour que la fonction puisse s'effectuer correctement. Ainsi, la fonction s'arretera dès qu'elle tombera sur une valeur non atypiques et ne prendra donc pas en compte les valeurs potentiellement atypiques supérieures à la moyenne qui sont placer en dernière. Cette nouvelle fonction nous donnera donc uniquement les valeur atypiques inférieures à la moyenne.
 
+Prenons l'exemple de la variable "Ortg" qui correspond à l'offensive rating, une statistique avancée qui calcule l'impact d'un joueur sur l'attaque de son équipe (plus la statistique est élevée, plus le joueur impacte positivement l'attaque de son équipe). Le boxplot nous montre que la variable possède des individus potentiellement atypiques supérieures et inférieures à la moyenne.
+![image](https://user-images.githubusercontent.com/116641100/217602324-8d4ab105-fdb1-46d4-994e-9a8be84d1bee.png)
+
 Ainsi, grâce à ces trois fonctions, nous avons pu supprimer toutes les observations possédant des valeurs atypiques et notre base de données est maintenant constitués de 10 245 joueurs pour 59 variables.
 
 ### Etude des corrélations
