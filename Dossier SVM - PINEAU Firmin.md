@@ -3,19 +3,19 @@
 L'objectif de ce dossier est de classer des joueurs de basket universitaire selon leur poste sur le terrain en fonction de leurs statistiques.
 La base de données initiales a été trouvé sur Kaggle et regroupe les statistiques de 25 719 joueurs de basket universitaire entre 2009 et 2021 selon 8 postes dfférents.
 
-## Analyse des données
+## I- Analyse des données
 
-### Suppression des variables inutiles
+### 1. Suppression des variables inutiles
 Nous avons supprimer toutes les variables qui ne sont pas utiles ou qui n'apportent pas d'informations pour classer les joueurs selon leur poste. En effet, des variables comme l'année, le numéro du joueur ou l'identifiant du joueur ne seront pas utile et n'apporteront aucune information pour répondre à notre problématique. 
 
 Ainsi, les variables 'yr'(niveau d'études du joueur), 'num' (numéro du joueur), 'year'(année), 'pid' (idenatifiant du joueur) ,'type'(variable prenant uniquement la valeur 1),'pick' (place du joueur lors de la draft nba). De plus, une variabe sans nom était présente dans la base de données, elle a aussi été supprimé puisqu'aucune explication sur la variable n'était indiqué dans la base de données.
 
-### Recodage de la variable 'ht'
+### 2. Recodage de la variable 'ht'
 Nous avons recoder la variable 'ht'(taille du joueur). En effet, les tailles étant inscrites en pied (mesure de la taille aux Etats-Unis), le format de cette variable c'est retrouvé transformer en date lors de l'importation (Un joueur mesurant 1m80 sera inscrit dans la base de données 5"11 (5 pieds et 11 pouces) et sera importé sous le format 11 Mai sur python). 
 
 Ainsi, dans un tableur excel, nous avons récupéré toutes les valeurs que prenait la variable 'ht' et nous l'avons recodé pour que les tailles soient indiquées en centimètres au lieu des pieds et que toutes les valeurs nulles ou incohérentes soient recodées en NA (Voir détail dans le tableur excel "Recodage ht").
 
-### Suppression des valeurs manquantes
+### 3. Suppression des valeurs manquantes
 Nous avons supprimer toutes les valeurs manquantes. En effet, certaines variables comme 'REC Rank' et 'dunksmade/(dunksmade+dunksmiss)' ont beaucoup de valeurs manquantes, nous allons donc supprimer toutes les observations pour lesquelles au moins une variable possède une valeur manquante. 
 
 Le Rec Rank est une note attribué par la chaine de télévision ESPN sur les joueurs de basket universitaire afin réaliser un classement des meilleurs jeunes joueurs qui ont le plus de chances de devenir des stars de la NBA. Cette note n'étant attribué qu'aux joueurs les plus prometteurs, une partie des joueurs de notre base de données n'ont pas de notes et vont donc être supprimés de notre analyse.
@@ -24,10 +24,10 @@ La variable 'dunksmade/(dunksmade+dunksmiss)' comptabilise le pourcentage de dun
 
 Ainsi, après suppression des valeurs manquantes, notre base de données est composée de 11 170 joueurs pour 59 variables.
 
-### Statistiques descriptives
+### 4. Statistiques descriptives
 Nous avons ensuite regarder les statistiques descriptives de notre base de données pour avoir un premier aperçu de nos variables. Ainsi, nous avons pu constater que notre base de données découpait les joueurs en 8 postes distincts et que le poste C étant celui le plus représenté dans notre base avec 2 607 joueurs évoluant à ce poste.
 
-### Etudes des valeurs atypiques
+### 5. Etudes des valeurs atypiques
 Nous avons ensuite regardé si nos variables explicatives quantitatives avaient des valeurs atypiques. Pour cela, nous avons utilisé la fonction mis à disposition par François pour détecter les points atypiques. Cependant, un nombre important de variables quantitatives (17 variables sur 54) avait des valeurs potentiellement atypiques à la fois supérieures et inférieures à la moyenne et la fonction de François n'indiquait pas si les valeurs atypiques étaient les valeurs au dessus de la moyenne, en dessous de la moyenne ou les deux en même temps. 
 
 Nous avons donc modifié les fonctions données par François afin de créer une fonction qui ne détecte que les points atypiques supérieures à la moyenne et une autre fonction qui ne détecte que les points atypiques inférieures à la moyenne. 
@@ -49,7 +49,7 @@ Ainsi, nous pouvons supprimer tous les individus ayant un Ortg supérieur à 159
 
 Grâce à ces trois fonctions, nous avons pu supprimer toutes les observations possédant des valeurs atypiques et notre base de données est maintenant constitués de 10 245 joueurs pour 59 variables.
 
-### Etude des corrélations
+### 6. Etude des corrélations
 Enfin, nous avons étudier les corrélations entre nos variables pour voir si certaines variables donnait des informations redondantes dans notre analyse.
 ![image](https://user-images.githubusercontent.com/116641100/217606284-23f36948-eceb-4f31-88fc-9bc06110cd59.png)
 
@@ -75,15 +75,15 @@ La variable adjoe est fortement corrélés à la variable ogbpm. Cependant, comm
 ![téléchargement (1)](https://user-images.githubusercontent.com/116641100/217615218-55a2b66f-0305-4cd7-a525-3e8897ef1188.png)
 Après avoir supprimé ces variables de notre base de données, nous observons qu'il n'y a plus de problème de multicolinéarité dans notre base de données. Nous allons donc passer à la modélisation avec une base de données composée de 10 245 joueurs pour 41 variables dont 3 ne sont pas utilisées car elle donne le nom, l'équipe et la conférence du joueur et 1 correspond à la variable à expliquer. Ainsi, notre base comprend 37 variables explicatives.
 
-## Modélisation
+## II- Modélisation
 
-### Séparation du jeu de données en Train/Test
+### 1. Séparation du jeu de données en Train/Test
 Tout d'abord, nous séparons notre base de données en deux bases distinctes : une base d'entrainement comprenant 8 196 observations et une base de validation comprenant 1 903 observations. Puis nos standardisons nos variables afin qu'elles soient toutes sur la même échelle.
 
-### Classification Multiclasse
+### 2. Classification Multiclasse
 Afin de réaliser une classification multiclasse, nous allons utiliser un SVC avec la méthode OVO (One Versus One) et avec la méthode OVR (One Versus Rest). 
 
-#### Classification One Versus One (OVO)
+#### a) Classification One Versus One (OVO)
 Avec la méthode OVO, nous obtenons la matrice de confusion suivante :
 ![Capture d’écran 2023-02-09 à 17 07 55](https://user-images.githubusercontent.com/116641100/217869249-448d565a-3b98-46ee-88b0-ced7837e9019.png)
 
@@ -97,7 +97,7 @@ Il semble plus difficile de prédire des joueurs ayant les postes Stretch 4 et P
 
 En effet, on remarque que 14% des Stretch 4 sont prédits en Wing F et 20% en PF/C. De même avec les PF/C qui sont prédit à 12% comme des Strecth 4, à 7% comme des Wing F et à 10% comme des C. Enfin les Wing F sont plutôt bien prédit avec un taux de précision de 80% mais 10% des Wing F sont prédits comme des Wing G ou des PF/C par notre modèl
 
-#### Classification One Versus Rest (OVR)
+#### b) Classification One Versus Rest (OVR)
 Nous allons maintenant regarder le matrice de confusion avec la méthode OVR : 
 ![Capture d’écran 2023-02-09 à 17 08 29](https://user-images.githubusercontent.com/116641100/217869870-4c8eb563-ab91-4e49-985c-a4d2bff8f21c.png)
 
@@ -110,7 +110,7 @@ On remarque une difficulté pour notre modèle à faire la différence entre un 
 
 Ce résultat montre que, comme dit auparavant, la disticntion entre Wing G, Wing F, Stretch 4 et PF/C est assez fine puisque les joueurs composant ces classes sont très polyvalents et sont donc généralement capables de joués à l'ensemble de ces différents postes. En effet, les postes n'étant pas fixes au basket, les joueurs jouant à ces postes vont changer de catégorie au cours de la saison en fonction des différentes oppositions, ce qui va compliquer notre analyse.
 
-#### Réseau de neurones
+#### c) Réseau de neurones
 Nous allons maintenant réaliser un modèle de réseau de neurones afin de voir s'il est possible d'améliorer notre classification.
 
 Cependant, lorsque nous avons voulu effectuer le réseau de neurones, celui-ci n'a pas abouti et les résultats que nous obtenions étant étranges. En effet, notre learning curve n'est pas utilisable car elle ne montre pas de signes d'apprentissages de la part de notre réseau de neurones. 
@@ -120,25 +120,27 @@ Malgré les différents essais en changeant les valeurs des hyper-paramètres, e
 
 Ainsi, nous avons décider de ne pas utliser de réseau de neurones pour notre classification puisque ceux-ci ne nous donnent pas de résultats utilisables.
 
-#### Concluson classification multiclasse
+#### d) Concluson classification multiclasse
 Pour conclure sur notre classification multiclasse, nous pouvons dire que les résultats de la méthode OVO sont plutôt satisfaisants puisque la plupart des postes sont bien prédits et seules les postes assez similaires (Stretch 4 et PF/C) ont des résultats plus décevants mais tout de même acceptable avec environ 70% de bonnes prédictions.
 
 De plus, la répartition des effectifs dans les différentes classes sont assez hétérogènes, ce qui peut poser des problèmes pour bien définir les différences entre les postes et donc bien les classer. En effet, notre base de données ne comporte que 114 joueus évoluant au poste de Pure PG contre 2 343 joueurs évoluant au poste de Wing G. 
 
-Ainsi, cette répartition inégale à entrainer des problèmes dans ntre classifiction puisqu'aucun Pure PG n'est bien prédit dans la modélisation OVR contre 80% des Wing G dans cette même modélisation.
+Ainsi, cette répartition inégale à entrainer des problèmes dans notre classifiction puisqu'aucun Pure PG n'est bien prédit dans la modélisation OVR contre 80% des Wing G dans cette même modélisation.
+
 ![Capture d’écran 2023-02-09 à 17 34 17](https://user-images.githubusercontent.com/116641100/217877837-27e31f2d-dac4-4e66-a9af-ce24549f5bc4.png)
 
-### Classification binaire
+### 3. Classification binaire
 
-#### Création de la variable binaire
+#### a) Création de la variable binaire
 Nous allons donc créer une nouvelle variable qui prend la valeur 1 lorsque le joueur va jouer à un poste dit 'extérieur 'et 2 lorsque celui-ci va jouer à un poste dit 'intérieur'.
 
 Parmi les 8 postes inclus dans notre base de données, nous pouvons définir 5 postes correspondant aux postes extérieurs (Combo G, Pure PG, Scoring PG, Wing G et Wing F) et 3 postes correspondant  aux potes intérieurs (Stretch 4, PF/C et C). On notera cependant 2 postes que le qualifiera "d'hybrides" correspondant à des postes où les joueurs vont être considéré intérieurs et extérieurs en fonction des circonstances (Wing F étant plus axé extérieur mais pouvant jouer comme un intérieur sur certaines phases de jeu et Stretch 4 étant plus axé intérieur mais pouvant jouer comme un extérieur sur certaines phases de jeu).
 
 Après avoir recodé notre variables, nous obtenons 5 636 joueurs que nous classons comme des extérieurs et prenant la valeur 0 et 3 879 joueurs que nous classons comme des intérieurs et prenant la valeur 1.
+
 ![Capture d’écran 2023-02-09 à 17 34 35](https://user-images.githubusercontent.com/116641100/217878120-59a1e8cf-6cf6-462d-9679-b47729c006d1.png)
 
-#### Recherche du meilleur modèle
+#### b) Recherche du meilleur modèle
 Pour cette classification binaire, nous allons utiliser 4 modèles différents que nous allons comparer afin de définir le modèle le plus approprié pour notre analyse. Ces 4 modèles sont : la régression logistique, le SVM, le SVM linéaire et le SGDClassifier.
 ![image](https://user-images.githubusercontent.com/116641100/217879444-d22f638a-6350-4a67-b851-0943aefe89b5.png)
 
@@ -146,17 +148,19 @@ Pour cette classification binaire, nous allons utiliser 4 modèles différents q
 
 Après comparaison de nos différents modèles, le SVM linéaire ressort comme étant le plus efficace puisqu'il à l'accuracy la plus grande et un écart-type très faible.
 
-#### SVM Linéaire
-##### Matrice de confusion
+#### c) SVM Linéaire
+##### 1/ Matrice de confusion
 Après avoir optimiser les hyperparamètres de notre modèle et entrainer le modèle avec la base d'entrainement, nous avons réaliser la matrice de confusion pour voir la qualité de notre modèle :
+
 ![image](https://user-images.githubusercontent.com/116641100/217881518-8acd9552-3a42-493b-a443-51d32ec2a35d.png)
 
 Le modèle ne commet quasiment aucune erreur de prévision, ce qui est logique puisque nous avons classé à la main les joueurs extérieurs et intérieurs et que la distinction entre ces deux classes est beaucoup plus simple qu'entre les 8 postes.
+
 ![Capture d’écran 2023-02-09 à 17 49 02](https://user-images.githubusercontent.com/116641100/217882036-a3735d9d-2db7-4637-91e0-f50f0f9a9544.png)
 
 Le modèle prédit correctement 97,4% des joueurs dans notre base d'entrainement et 97,1% des joueurs dans notre base de validation. Ces deux valeurs étant très élevées et surtout très proches, nous pouvons penser que notre modèle à un problème de sur ajustement. Cependant, notre base étant composé de plus de 10 000 joueurs diviser en seulement deux classes et la différence statistiques entre les postes intérieurs et extérieurs au basket étant assez simple à observer, notre modèle à pu facilement classer les joueurs et donc possède un taux de bonne classificaton très élevée sans pour autant souffrir de sur ajustement.
 
-##### Importance des variables
+##### 2/ Importance des variables
 Enfin, nous pouvons nous intéresser à l'importance des variables dans la classification.
 ![image](https://user-images.githubusercontent.com/116641100/217883399-66c9adc3-3390-476f-805c-5be05c401779.png)
 
