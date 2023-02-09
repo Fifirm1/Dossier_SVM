@@ -1,7 +1,7 @@
 # Classification des postes des basketteurs universitaires
 
 L'objectif de ce dossier est de classer des joueurs de basket universitaire selon leur poste sur le terrain en fonction de leurs statistiques.
-La base de données initiales a été trouvé sur Kaggle et regroupe les statistiques de 25 719 joueurs de basket universitaire entre 2009 et 2021.
+La base de données initiales a été trouvé sur Kaggle et regroupe les statistiques de 25 719 joueurs de basket universitaire entre 2009 et 2021 selon 8 postes dfférents.
 
 ## Analyse des données
 
@@ -60,7 +60,21 @@ La variable adjoe est fortement corrélés à la variable ogbpm. Cependant, comm
 Après avoir supprimé ces variables de notre base de données, nous observons qu'il n'y a plus de problème de multicolinéarité dans notre base de données. Nous allons donc passer à la modélisation avec une base de données composée de 10 245 joueurs pour 41 variables dont 3 ne sont pas utilisées car elle donne le nom, l'équipe et la conférence du joueur et 1 correspond à la variable à expliquer. Ainsi, notre base comprend 37 variables explicatives.
 
 ## Modélisation
+Tout d'abord, nous séparons notre base de données en deux bases distinctes : une base d'entrainement comprenant 8 196 observations et une base de validation comprenant 1 903 observations. Puis nos standardisons nos variables afin qu'elles soient toutes sur la même échelle.
+Afin de réaliser une classification multiclasse, nous allons utiliser un SVC avec la méthode OVO (One Versus One) et avec la méthode OVR (One Versus Rest). 
+Avec la méthode OVO, nous obtenons la matrice de confusion suivante :
+![Capture d’écran 2023-02-09 à 17 07 55](https://user-images.githubusercontent.com/116641100/217869249-448d565a-3b98-46ee-88b0-ced7837e9019.png)
 
+Pour les joueurs jouant purement à un poste extérieur (avec la lettre G dans leur poste), on remarque que le modèle prédit plutôt bien leur poste puisque le taux de précision est compris entre 80 et 90%								
+De même pour les joueurs C qui ont une bonne prévision avec 92% de bonnes prédictions								
+								
+Les joueurs Pure PG sont moins bien prédits que les autres G (82% de bonnes prédictions), cela est surement du au faible nombre de Pure PG dans notre base de données qui vont fausser notre analyse. En effet 18% des Pure PG sont classés en Scoring PG alors que seulement 2% des Scoring PG sont classés en Pure PG								
+Il semble plus difficile de prédire des joueurs ayant les postes Stretch 4 et PF/C car leurs taux de prédictions est de 65% pour les premiers et de 72% pour les deuxièmes								
+Cela peut s'expliquer par le fait que ces postes sont très proches en termes d'impact sur le jeu et sont composés de joueurs très polyvalents qui seront donc plus difficiles à catégoriser								
+En effet, on remarque que 14% des Stretch 4 sont prédits en Wing F et 20% en PF/C								
+De même avec les PF/C qui sont prédit à 12% comme des Strecth 4, à 7% comme des Wing F et à 10% comme des C								
+								
+Enfin les Wing F sont plutôt bien prédit avec un taux de précision de 80% mais 10% des Wing F sont prédits comme des Wing G ou des PF/C par notre modèle.								![image](https://user-images.githubusercontent.com/116641100/217869288-87683f08-fc4b-424d-942b-4cfb75dacacc.png)
 
 
 
